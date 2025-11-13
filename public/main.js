@@ -6,7 +6,10 @@ let botoia1=document.querySelector("input[value='Gehitu Misioa']")
 let botoia2=document.querySelector("input[value='Ezabatu Dena']")
 let botoia3=document.querySelector("input[value='Igo Zerbitzarira']")
 let botoia4=document.querySelector("input[value='Jaitsi Zerbitzaritik']")
-
+let misioIzena=document.getElementById("misioIzena");
+let misioZailtasuna=document.getElementById("misioZailtasuna");
+let misioSaria=document.getElementById("misioSaria");
+let deskribapena=document.getElementById("misioDeskribapena");
 function gertaerak(){
     gordetakoMisioak= JSON.parse(localStorage.getItem('misioak'))||[];
 
@@ -26,37 +29,11 @@ function gertaerak(){
            jaitsiZerbitzaritik();
         }else if(botoia === "Gorde"){
 
-          //  let botoia1=document.querySelector("input[value='Gorde']")
-           // let botoia2=document.querySelector("input[value='Kantzelatu']")
-            botoia1.value="Gehitu Misioa"
-            botoia2.value="Ezabatu Dena"
-            botoia3.style.visibility="visible";
-            botoia4.style.visibility="visible";
-            let izenaf = document.getElementById("misioIzena").value;
-            let zailtasunaf = document.getElementById("misioZailtasuna").value;
-            let sariaf = document.getElementById("misioSaria").value;
-            let pertsonaKopf = document.getElementById("misioPertsonaKop").value;
-            let misioBerri={
-                id: parseInt(form.dataset.editingId),
-                izena: izenaf,
-                zailtasuna:zailtasunaf,
-                saria:sariaf,
-                pertsonaKop:pertsonaKopf
-            }
+            let misioBerri= sortuMisioa(parseInt(form.dataset.editingId));
             updateZerbitzaria(misioBerri)
 
         }else if(botoia === "Kantzelatu"){
-            event.preventDefault();
-           // let botoia1=document.querySelector("input[value='Gorde']")
-           // let botoia2=document.querySelector("input[value='Kantzelatu']")
-            botoia1.value="Gehitu Misioa"
-            botoia2.value="Ezabatu Dena"
-            botoia3.style.visibility="visible";
-            botoia4.style.visibility="visible";
-            document.getElementById("misioIzena").value="";
-            document.getElementById("misioZailtasuna").value="";
-            document.getElementById("misioSaria").value="";
-            document.getElementById("misioPertsonaKop").value="";
+            console.log("Kantzelatuta")
         }else{
             event.preventDefault();
         }
@@ -64,30 +41,41 @@ function gertaerak(){
     )
     misioLista.addEventListener('click',function (event){
         if (event.target.classList.contains('editatu-btn')) {
-
-            botoia1.value="Gorde"
-            botoia2.value="Kantzelatu"
-            botoia3.style.visibility="hidden";
-            botoia4.style.visibility="hidden";
             const misioId = parseInt(event.target.dataset.id);
             const misioaEditatzeko = gordetakoMisioak.find(misio => misio.id === misioId);
-            document.getElementById("misioIzena").value=misioaEditatzeko.izena;
-            document.getElementById("misioZailtasuna").value=misioaEditatzeko.zailtasuna;
-             document.getElementById("misioSaria").value=misioaEditatzeko.saria;
-             document.getElementById("misioPertsonaKop").value=misioaEditatzeko.pertsonaKop;
-             form.dataset.editingId = event.target.dataset.id;
+            editatuModeJarri(misioaEditatzeko);
+            form.dataset.editingId = event.target.dataset.id;
              event.preventDefault();
         }else if(event.target.classList.contains('ezabatu-btn')){
             let misioID=parseInt(event.target.dataset.id);
             deleteZerbitzaritik(misioID);
-
-
 
         }
 
     })
 }
 window.onload=gertaerak
+function jarriFormMode(){
+    botoia1.value="Gehitu Misioa"
+    botoia2.value="Ezabatu Dena"
+    botoia3.style.visibility="visible";
+    botoia4.style.visibility="visible";
+   misioIzena.value="";
+    misioZailtasuna.value="";
+   misioSaria.value="";
+   deskribapena.value="";
+}
+function editatuModeJarri(misioaEditatzeko){
+    botoia1.value="Gorde"
+    botoia2.value="Kantzelatu"
+    botoia3.style.visibility="hidden";
+    botoia4.style.visibility="hidden";
+    misioIzena.value=misioaEditatzeko.izena;
+    misioZailtasuna.value=misioaEditatzeko.zailtasuna;
+    misioSaria.value=misioaEditatzeko.saria;
+    deskribapena.value=misioaEditatzeko.deskribapena;
+
+}
 function ezabatuBatLokal(id){
     gordetakoMisioak=gordetakoMisioak.filter(uneko=>uneko.id!==id)
     misioLista.innerHTML=""
@@ -129,25 +117,34 @@ function aktualizatu(misioBerri){
     gordetakoMisioak=gordetakoMisioak.filter(uneko=>uneko.id!==misioBerri.id)
     gordeMisioak(misioBerri);
 }
-function gehituMisioa(){
-    let izenaf = document.getElementById("misioIzena").value;
-    let zailtasunaf = document.getElementById("misioZailtasuna").value;
-    let sariaf = document.getElementById("misioSaria").value;
-    let pertsonaKopf = document.getElementById("misioPertsonaKop").value;
-    if (!izenaf || !zailtasunaf || !sariaf || !pertsonaKopf) {
+function sortuMisioa( idBerri){
+    let izenaf = misioIzena.value;
+    let zailtasunaf = misioZailtasuna.value;
+    let sariaf = misioSaria.value;
+    let deskribapenaf = deskribapena.value;
+    if (!izenaf || !zailtasunaf || !sariaf || !deskribapenaf) {
         alert("Bete eremu guztiak, mesedez!");
-        return false;
+        return null;
+    }
+    if(idBerri===0){
+        idBerri=parseInt(Date.now());
     }
 
     let misioBerri={
-        id: parseInt(Date.now()),
+        id: idBerri,
         izena: izenaf,
+        deskribapena:deskribapenaf,
         zailtasuna:zailtasunaf,
-        saria:sariaf,
-        pertsonaKop:pertsonaKopf
-    }
+        saria:sariaf
 
-    gordeMisioak(misioBerri)
+    }
+    return misioBerri;
+}
+function gehituMisioa(){
+    let misioBerri=sortuMisioa(0);
+    if(misioBerri!=null) {
+        gordeMisioak(misioBerri)
+    }
 }
 function gordeMisioak(misioBerri){
     gordetakoMisioak.push(misioBerri)
@@ -171,10 +168,9 @@ function erakutsiMisioak(){
         text.style.marginBottom = "10px"; // espacio entre misiones
         text.style.whiteSpace = "pre-line";
         text.textContent=`${i}-Misio izena:${misio.izena}
+         Deskribapena :${misio.deskribapena}
          Misio Zailtasuna:${misio.zailtasuna}
-         Misio Saria:${misio.saria}
-         Pertsona Kop:${misio.pertsonaKop}
-         Misio id: ${misio.id}`
+         Misio Saria:${misio.saria}`
         i=i+1;
         const botoienDiv = document.createElement("div");
         botoienDiv.className = "misio-botoiak";

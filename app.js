@@ -26,7 +26,6 @@ app.get('/misioak',async (req,res)=>{
     console.log("Sartu zara get-era")
     try {
         const emaitzaString = await fs.readFile(QUESTROUTE, 'utf8');
-        console.log(JSON.parse(emaitzaString))
         res.json( JSON.parse(emaitzaString));
 
     }catch(error){
@@ -75,8 +74,6 @@ app.delete('/misioak/:id',async(req,res)=>{
     const emaitzaString = await fs.readFile(QUESTROUTE, 'utf8');
     let emaitzaJson = JSON.parse(emaitzaString);
     emaitzaJson=emaitzaJson.filter((unekoa)=>{
-        console.log(idDelete, "ID delete")
-        console.log(unekoa.id,"UNEKOA ID")
         return  unekoa.id!==idDelete});
     await fs.writeFile(QUESTROUTE, JSON.stringify(emaitzaJson))
     res.status(200).json({emaitza :'Dena ondo joan da.'})
