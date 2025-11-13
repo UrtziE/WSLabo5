@@ -54,5 +54,36 @@ app.post('/misioak',async (req,res)=>{
         res.status(404).json({emaitza :'Zerbitzarian gordetzean errore bat egon da'})
     }
 })
+app.put('/misioak', async (req,res)=>{
+    let update=req.body;
+    try {
+        const emaitzaString = await fs.readFile(QUESTROUTE, 'utf8');
+        let emaitzaJson = JSON.parse(emaitzaString)
+        emaitzaJson=emaitzaJson.filter((unekoa)=>{
+          return  unekoa.id!==update.id})
+        emaitzaJson.push(update);
+        await fs.writeFile(QUESTROUTE, JSON.stringify(emaitzaJson))
+        res.status(200).json({emaitza :'Dena ondo joan da.'})
+    }catch(error){
+        console.error('Errorea prozesuan', error.message);
+        res.status(404).json({emaitza :'Zerbitzarian gordetzean errore bat egon da'})
+    }
+})
+app.delete('/misioak/:id',async(req,res)=>{
+    let idDelete=parseInt(req.params.id)
+    try{
+    const emaitzaString = await fs.readFile(QUESTROUTE, 'utf8');
+    let emaitzaJson = JSON.parse(emaitzaString);
+    emaitzaJson=emaitzaJson.filter((unekoa)=>{
+        console.log(idDelete, "ID delete")
+        console.log(unekoa.id,"UNEKOA ID")
+        return  unekoa.id!==idDelete});
+    await fs.writeFile(QUESTROUTE, JSON.stringify(emaitzaJson))
+    res.status(200).json({emaitza :'Dena ondo joan da.'})
+}catch(error){
+    console.error('Errorea prozesuan', error.message);
+    res.status(404).json({emaitza :'Zerbitzarian gordetzean errore bat egon da'})
+}
+})
 
 

@@ -108,6 +108,57 @@ form {
     color: #3b2f1e;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
 }
+/* --- Contenedor de cada misión --- */
+.misio-item {
+    display: flex;              /* Activamos Flexbox */
+    align-items: center;        /* Alinea verticalmente el texto y el botón al centro */
+    /* NOTA: Hemos quitado 'justify-content: space-between;' */
+
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f7f2e9; /* Un color pergamino claro para el fondo */
+    border: 1px solid #dcd3bf;
+    border-radius: 8px;         /* Bordes más redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Una sombra sutil */
+}
+
+/* --- Botón "editatu" más bonito --- */
+.misio-botoiak {
+    display: flex;
+    flex-direction: column;  /* ¡LA LÍNEA CLAVE! Apila los botones verticalmente */
+    gap: 8px;                /* Espacio vertical entre los botones apilados */
+    margin-left: 20px;       /* Espacio entre el texto y la columna de botones */
+}
+
+/* Estilos para los botones (podemos unificarlos) */
+.editatu-btn, .ezabatu-btn {
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;         /* Asegura que el texto esté centrado */
+    width: 100px;               /* Damos un ancho fijo para que se vean uniformes */
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Colores específicos para cada botón */
+.editatu-btn {
+    background-color: #8a6d3b; /* Marrón */
+}
+.editatu-btn:hover {
+    background-color: #6c562e;
+    transform: translateY(-1px);
+}
+
+.ezabatu-btn {
+    background-color: #dc3545; /* Rojo */
+}
+.ezabatu-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
 h2 {
     font-family: 'Cinzel Decorative', serif;
     text-shadow: 2px 2px 5px #000;
